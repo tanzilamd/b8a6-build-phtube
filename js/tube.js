@@ -19,18 +19,11 @@ const displayCategory = (categoryArray) => {
             "category-btn-container"
         );
         const newBtn = document.createElement("div");
-        // newBtn.classList =
-        //     "btn btn-info bg-[#25252533] hover:bg-[#25252533] border-none";
+
         newBtn.innerHTML = `
             <button class="btn btn-info bg-[#25252533] hover:bg-[#25252533] border-none" onclick="displayByCategory(${category.category_id})">${categoryName}</button>
         `;
-        // newBtn.innerText = categoryName;
-        // newBtn.setAttribute(
-        //     "onclick",
-        //     `${displayByCategory(category.category_id)}`
-        // );
 
-        // console.log(category.category_id);
         CategoryBtnContainer.appendChild(newBtn);
     });
 };
@@ -61,13 +54,13 @@ const displayData = (videoData) => {
 
         newVideo.innerHTML = `
             <figure class="">
-                <img class="" src="${singleVideo.thumbnail}" alt="Thumbnail"/>
+                <img class="w-[100%] lg:h-48" src="${singleVideo.thumbnail}" alt="Thumbnail"/>
             </figure>
             
             <div class="card-body">
                 <div class="flex justify-between gap-2">
                     <div>
-                        <img class="rounded-full w-16" src="${singleVideo.authors[0].profile_picture}" alt="Profile" />
+                        <img class="rounded-full w-16 h-16" src="${singleVideo.authors[0].profile_picture}" alt="Profile" />
                     </div>
                     
                     <div class="space-y-1 flex-1">
