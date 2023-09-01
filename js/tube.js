@@ -60,7 +60,7 @@ const displayData = (videoData) => {
             <div class="card-body">
                 <div class="flex justify-between gap-2">
                     <div>
-                        <img class="rounded-full w-16 h-16" src="${singleVideo.authors[0].profile_picture}" alt="Profile" />
+                        <img class="rounded-full w-14 h-14" src="${singleVideo.authors[0].profile_picture}" alt="Profile" />
                     </div>
                     
                     <div class="space-y-1 flex-1">
