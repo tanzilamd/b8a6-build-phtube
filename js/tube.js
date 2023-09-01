@@ -37,6 +37,13 @@ const loadData = async (id = "1000") => {
 
     const dataArray = data.data;
     displayData(data.data);
+
+    // console.log(dataArray);
+
+    // const hello = dataArray.sort(function (a, b) {
+    //     return a.category_id.valueOf() - b.category_id.valueOf();
+    // });
+    // console.log(hello);
 };
 
 // Display Data
@@ -45,8 +52,16 @@ const displayData = (videoData) => {
     const videoContainer = document.getElementById("video-container");
     videoContainer.textContent = "";
 
+    if (videoData.length < 1) {
+        const noVideoAvailable = document.getElementById("no-video-available");
+        noVideoAvailable.style.display = "block";
+    } else {
+        const noVideoAvailable = document.getElementById("no-video-available");
+        noVideoAvailable.style.display = "none";
+    }
+
     videoData.forEach((singleVideo) => {
-        console.log(singleVideo);
+        // console.log(singleVideo);
 
         // show video
         const newVideo = document.createElement("div");
