@@ -7,7 +7,7 @@ const loadCategory = async () => {
 
     const categoryArray = data.data;
 
-    displayCategory(data.data);
+    displayCategory(categoryArray);
 };
 
 // Display categories with btn
@@ -36,14 +36,17 @@ const loadData = async (id = "1000") => {
     const data = await res.json();
 
     const dataArray = data.data;
-    displayData(data.data);
+    displayData(dataArray);
+    postedDate(dataArray);
 
     // console.log(dataArray);
 
-    // const hello = dataArray.sort(function (a, b) {
-    //     return a.category_id.valueOf() - b.category_id.valueOf();
+    // const dataSort = dataArray.sort(function (a, b) {
+    //     // console.log(a.others.views);
+
+    //     return a.others.views.valueOf() - b.others.views.valueOf();
     // });
-    // console.log(hello);
+    // console.log(dataSort);
 };
 
 // Display Data
@@ -61,15 +64,36 @@ const displayData = (videoData) => {
     }
 
     videoData.forEach((singleVideo) => {
-        // console.log(singleVideo);
+        // Second to minute & hrs
+        let second;
+        let totalMinutes;
+        let minute;
+        let hour;
+        let displayBadge = "block";
+
+        if (singleVideo?.others?.posted_date) {
+            second = singleVideo?.others?.posted_date;
+            totalMinutes = Math.floor(second / 60);
+
+            minute = totalMinutes % 60;
+            hour = Math.floor(totalMinutes / 60);
+
+            if (hour > 24) {
+                days = Math.floor(hour / 24);
+                hour = hour % 24;
+            }
+        } else {
+            displayBadge = "hidden";
+        }
 
         // show video
         const newVideo = document.createElement("div");
         newVideo.classList = "card card-compact bg-base-100 shadow-xl";
 
         newVideo.innerHTML = `
-            <figure class="">
+            <figure class="relative">
                 <img class="w-[100%] lg:h-48" src="${singleVideo.thumbnail}" alt="Thumbnail"/>
+                <div class="badge badge-neutral bg-[#171717] text-white text-xs rounded-md absolute bottom-2 right-1 ${displayBadge}">${hour}hrs ${minute}min ago</div>
             </figure>
             
             <div class="card-body">
@@ -95,6 +119,30 @@ const displayData = (videoData) => {
 const displayByCategory = (id) => {
     loadData(id);
 };
+
+// Posting Date
+const postedDate = (data) => {
+    data?.forEach((singleVideo) => {
+        // if (singleVideo?.others?.posted_date) {
+        //     const second = singleVideo?.others?.posted_date;
+        //     const totalMinutes = Math.floor(second / 60);
+        //     let minute = totalMinutes % 60;
+        //     let hour = Math.floor(totalMinutes / 60);
+        //     if (hour > 24) {
+        //         days = Math.floor(hour / 24);
+        //         hour = hour % 24;
+        //         console.log(`${days}D, ${hour}H, ${minute}M`);
+        //     } else {
+        //         console.log(`${hour}H, ${minute}M`);
+        //     }
+        // } else {
+        //     // console.log(" ");
+        // }
+    });
+};
+
+// Active Btn
+const activeBtn = () => {};
 
 loadCategory();
 loadData();
