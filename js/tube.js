@@ -1,3 +1,7 @@
+let apiId = 1000;
+let allViews = [];
+let allViewsInt = [];
+
 // Load Categories Name
 const loadCategory = async () => {
     const res = await fetch(
@@ -21,7 +25,7 @@ const displayCategory = (categoryArray) => {
         const newBtn = document.createElement("div");
 
         newBtn.innerHTML = `
-            <button class="btn btn-info bg-[#25252533] hover:bg-[#25252533] border-none" onclick="displayByCategory(${category.category_id})">${categoryName}</button>
+            <button class="btn btn-info btn-category bg-[#25252533] hover:bg-[#25252533] border-none" onclick="displayByCategory(${category.category_id})">${categoryName}</button>
         `;
 
         CategoryBtnContainer.appendChild(newBtn);
@@ -37,16 +41,8 @@ const loadData = async (id = "1000") => {
 
     const dataArray = data.data;
     displayData(dataArray);
-    postedDate(dataArray);
-
-    // console.log(dataArray);
-
-    // const dataSort = dataArray.sort(function (a, b) {
-    //     // console.log(a.others.views);
-
-    //     return a.others.views.valueOf() - b.others.views.valueOf();
-    // });
-    // console.log(dataSort);
+    apiId = id;
+    console.log(apiId);
 };
 
 // Display Data
@@ -92,19 +88,29 @@ const displayData = (videoData) => {
 
         newVideo.innerHTML = `
             <figure class="relative">
-                <img class="w-[100%] lg:h-48" src="${singleVideo.thumbnail}" alt="Thumbnail"/>
+                <img class="w-[100%] md:h-48" src="${
+                    singleVideo.thumbnail
+                }" alt="Thumbnail"/>
                 <div class="badge badge-neutral bg-[#171717] text-white text-xs rounded-md absolute bottom-2 right-1 ${displayBadge}">${hour}hrs ${minute}min ago</div>
             </figure>
             
             <div class="card-body">
                 <div class="flex justify-between gap-2">
                     <div>
-                        <img class="rounded-full w-14 h-14" src="${singleVideo.authors[0].profile_picture}" alt="Profile" />
+                        <img class="rounded-full w-14 h-14" src="${
+                            singleVideo.authors[0].profile_picture
+                        }" alt="Profile" />
                     </div>
                     
                     <div class="space-y-1 flex-1">
-                        <h4 class="text-[#171717] font-bold text-sm">${singleVideo.title}</h4>
-                        <p>${singleVideo.authors[0].profile_name}</p>
+                        <h4 class="text-[#171717] font-bold text-sm">${
+                            singleVideo.title
+                        }</h4>
+                        <p>${singleVideo.authors[0].profile_name} ${
+            singleVideo?.authors[0]?.verified
+                ? `<i class="fa-solid fa-circle-check text-[#2568EF]"></i>`
+                : ""
+        } </p>
                         <span>${singleVideo.others.views} views</span>
                     </div>
                 </div>
@@ -120,29 +126,36 @@ const displayByCategory = (id) => {
     loadData(id);
 };
 
-// Posting Date
-const postedDate = (data) => {
-    data?.forEach((singleVideo) => {
-        // if (singleVideo?.others?.posted_date) {
-        //     const second = singleVideo?.others?.posted_date;
-        //     const totalMinutes = Math.floor(second / 60);
-        //     let minute = totalMinutes % 60;
-        //     let hour = Math.floor(totalMinutes / 60);
-        //     if (hour > 24) {
-        //         days = Math.floor(hour / 24);
-        //         hour = hour % 24;
-        //         console.log(`${days}D, ${hour}H, ${minute}M`);
-        //     } else {
-        //         console.log(`${hour}H, ${minute}M`);
-        //     }
-        // } else {
-        //     // console.log(" ");
-        // }
-    });
-};
+// sort by view
+const sortByView = () => {};
+document
+    .getElementById("sort-by-view")
+    .addEventListener("click", async function () {
+        const res = await fetch(
+            `https://openapi.programming-hero.com/api/videos/category/${apiId}`
+        );
+        const data = await res.json();
+        const dataArray = data.data;
 
-// Active Btn
-const activeBtn = () => {};
+        allViews = [];
+
+        dataArray.forEach((views) => {
+            videoViews = views?.others?.views;
+
+            viewsInt = parseInt(videoViews.replace("K", ""));
+
+            allViews.push(views);
+
+            allViews.sort(function (a, b) {
+                return (
+                    parseInt(b?.others?.views.replace("K", "")) -
+                    parseInt(a?.others?.views.replace("K", ""))
+                );
+            });
+        });
+
+        displayData(allViews);
+    });
 
 loadCategory();
 loadData();
